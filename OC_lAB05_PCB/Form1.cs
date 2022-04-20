@@ -10,9 +10,11 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.Management;
 using Microsoft.VisualBasic;
+using System.Runtime.InteropServices;
 
 namespace OC_lAB05_PCB
 {
+
     public partial class Form1 : Form
     {
         //Снимок всех процессов
@@ -136,14 +138,35 @@ namespace OC_lAB05_PCB
         //Кнопка приостановить
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
-            GetProcesses();
-            RefreshProcessesList();
+            try
+            {
+                if (listView1.SelectedItems[0] != null)
+                {
+                    Process processToSuspend = processes.Where((x) => x.ProcessName ==
+                    listView1.SelectedItems[0].SubItems[0].Text).ToList()[0];
+                    StartStop.Suspend(processToSuspend);
+                    GetProcesses();
+                    RefreshProcessesList();
+                }
+            }
+            catch (Exception) { }
         }
+
         //Кнопка возобновить
         private void toolStripButton3_Click(object sender, EventArgs e)
         {
-            GetProcesses();
-            RefreshProcessesList();
+            try
+            {
+                if (listView1.SelectedItems[0] != null)
+                {
+                    Process processToResume = processes.Where((x) => x.ProcessName ==
+                    listView1.SelectedItems[0].SubItems[0].Text).ToList()[0];
+                    StartStop.Resume(processToResume);
+                    GetProcesses();
+                    RefreshProcessesList();
+                }
+            }
+            catch (Exception) { }
         }
         //Кнопка завершить
         private void toolStripButton4_Click(object sender, EventArgs e)
