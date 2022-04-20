@@ -11,6 +11,8 @@ using System.Diagnostics;
 using System.Management;
 using Microsoft.VisualBasic;
 using System.Runtime.InteropServices;
+using System.Threading;
+using Timer = System.Threading.Timer;
 
 namespace OC_lAB05_PCB
 {
@@ -151,7 +153,24 @@ namespace OC_lAB05_PCB
             }
             catch (Exception) { }
         }
+        //Кнопка приостановить через время
+        private void toolStripButton6_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Thread.Sleep(5000);
+                if (listView1.SelectedItems[0] != null)
+                {
+                    Process processToSuspend = processes.Where((x) => x.ProcessName ==
+        listView1.SelectedItems[0].SubItems[0].Text).ToList()[0];
+                    StartStop.Suspend(processToSuspend);
+                    GetProcesses();
+                    RefreshProcessesList();
 
+                }
+            }
+            catch (Exception) { }
+        }
         //Кнопка возобновить
         private void toolStripButton3_Click(object sender, EventArgs e)
         {
@@ -246,5 +265,7 @@ namespace OC_lAB05_PCB
         {
             Application.Exit();
         }
+
+
     }
 }
